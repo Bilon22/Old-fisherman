@@ -1,6 +1,5 @@
 //Fishing functions
 function showHour (){
-	
 	var position = 100;
 	var icon = game.add.sprite(width/2-150, position, 'icon');
 			icon.scale.setTo(scale, scale);
@@ -29,12 +28,23 @@ function showHour (){
 }
 function fishing (){
 	if(phoneOn < 0){
-		for(var x = 0; x < fishList.length; x++){
-			if((Math.ceil(vein.scale.y) == Math.ceil(scale*16))&&(weather == fishList[x].weather1 || weather == fishList[x].weather2)&& (time > fishList[x].timeOfDayMin && time < fishList[x].timeOfDayMax)&&Math.random()<0.01){
-				var weight = Math.random() * (fishList[x].weightMax - fishList[x].weightMin) + fishList[x].weightMin;
-				weight = Math.round(weight * 100) / 100;
+		for(var x = 0; x < FishList.length; x++){
+			if((Math.ceil(vein.scale.y) == Math.ceil(scale*16))&&(weather == FishList[x].weather1 || weather == FishList[x].weather2)&& (time > FishList[x].timeOfDayMin && time < FishList[x].timeOfDayMax)&&Math.random()<0.01){
+				FishInfo = {
+					id: 0,
+					weight : 0,
+					frame : 0,
+					weightRound : function(){
+						this.weight = Math.round(this.weight * 100) / 100;
+					},
+				}
+				FishInfo.id = x;
+				FishInfo.weight = Math.random() * (FishList[x].weightMax - FishList[x].weightMin) + FishList[x].weightMin;
+				FishInfo.weightRound();
+				FishInfo.frame = FishList[x].frame;
+				fish.frame = FishInfo.frame;
 				caught++;
-				console.log("U caught: " + fishList[x].name + " with weight: " + weight);
+				console.log("U caught: " + FishList[x].name + " with weight: " + FishInfo.weight);
 				fishRun();
 			}
 		}
@@ -43,10 +53,14 @@ function fishing (){
 function fishRun (){
 	veinDistance(2);
 	if(Math.floor(distance/7) >= 12){
-		caught+=2;
+		caught = 3;
 	}
+	
 	if(rolling == true){
-		caught++;
+		if(Math.floor(distance/7) <= 2){
+			caught = 3;
+		}
+		else caught++;
 	}
 }
 function fightWithFish (){
@@ -82,7 +96,7 @@ function breakVein (){
 function takingOut (){
 	fishTake.start();
 	veinClose.start();
-	
+
 //	if(rolling == true) caught = 0;
 	distance = 0;
 	barE.frame = 0;
@@ -109,6 +123,7 @@ function retire(){
 }
 function popupScreenHide (){
 	popupHide.start();
+	Backpack.fish[Backpack.fish.length] = FishInfo;
 	caught = 5;
 }
 function fishRestart (){
@@ -156,7 +171,7 @@ function guiCreate (){
 		popup.smoothed = false;
 		popupShow = game.add.tween(popup).to( { x: width/2 }, 1000, "Quart.easeOut", false, 0);
 		popupHide = game.add.tween(popup).to( { x: -width }, 1000, "Quart.easeOut", false, 0);
-		popup.addChild(game.make.sprite(-30, 40, 'fish'));
+		popup.addChild(game.make.sprite(-35, 40, 'fish'));
 		
 		popupClose = game.add.button(25, 10, 'button', popupScreenHide, this, 1, 1, 1);
 		popupClose.anchor.set(0.5);

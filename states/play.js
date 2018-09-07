@@ -24,7 +24,6 @@ function cloud(number){
 	this.number = number;
 	this.speed = null;
 	this.type = null;
-	this.color = null;
 		
 	this.create = function(){
 		clouds[number] = game.add.sprite(Math.floor(Math.random() * width * 2), Math.floor(Math.random() * height * 0.4), 'clouds');
@@ -54,16 +53,9 @@ function cloud(number){
 	}
 }
 
-console.log(scale, width);
-
 var playState = {
 	create: function() {
 		game.stage.backgroundColor = 'rgb(246, 164, 98)';
-		
-//		sunMoon = game.add.sprite(width/2, height, 'sunMoon');
-//		sunMoon.scale.setTo(scale, scale);
-//		sunMoon.anchor.set(0.5);
-//		sunMoon.smoothed = false;
 		
 		cloudsGenerate();
 		
@@ -83,7 +75,7 @@ var playState = {
 		vein.scale.setTo(1, scale*16);
 		vein.smoothed = false;
 		vein.tint = 0xffffff * Math.random();
-		veinClose = game.add.tween(vein.scale).to( { x: 1, y:1 }, 2000, "Quart.easeOut");
+		veinClose = game.add.tween(vein.scale).to( { x: 1, y:10 }, 2000, "Quart.easeOut");
 		veinUp = game.add.tween(vein.scale).to( { x: 1, y:scale*16 }, 2000, "Quart.easeOut");
 		
 		fish = game.add.sprite(39*scale, height, 'fish');
@@ -92,7 +84,7 @@ var playState = {
 		fish.smoothed = false;
 		fish.angle = 90;
 		fish.frame = 1;
-		fishTake = game.add.tween(fish).to( { y: height-83*scale }, 1000, "Quart.easeOut");
+		fishTake = game.add.tween(fish).to( { y: height-81*scale }, 500, "Quart.easeOut");
 		fishOut = game.add.tween(fish).to( { x: - width, angle: 1080 }, 3000, "Quart.easeOut");
 		
 		fishShow = game.add.tween(fish).to( { x: width*0.5, y: height*0.5, angle: 0 }, 1500, "Quart.easeOut");
